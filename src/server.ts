@@ -1,8 +1,10 @@
 import { WebSocket, WebSocketServer } from "ws";
-import {EventEmitter} from 'events'
-import { URL } from "url";
+// import {EventEmitter} from 'events'
+// import { URL } from "url";
 const sleep = (time: number) => new Promise(resolve => setTimeout(resolve, time));
 const rdm = () => Math.random().toString(36).substr(2, 15);
+const {URL} = require('url');
+const {EventEmitter} = require('events');
 
 interface Option {
   port: number
@@ -152,7 +154,7 @@ class Server {
         event.emit(reply, null);
       }, timeout);
 
-      event.once(reply, e => {
+      event.once(reply, (e: any) => {
         clearTimeout(timer);
         resolve(e);
       });

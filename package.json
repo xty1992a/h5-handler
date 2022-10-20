@@ -4,7 +4,8 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "build": "rollup --config config/index.mjs"
+    "compile": "rollup --config config/index.mjs",
+    "build": "rm -rf dist && pnpm compile"
   },
   "keywords": [],
   "author": "",

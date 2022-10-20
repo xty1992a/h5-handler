@@ -26,7 +26,8 @@ export default [
       globals(),
       builtins(),
       typescript({
-        exclude: "node_modules/**"
+        exclude: "node_modules/**",
+        module: "esnext"
       })
     ]
   },
@@ -36,11 +37,7 @@ export default [
       {
         file: root("dist/server.cjs.js"),
         format: "cjs"
-      },
-      {
-        file: root("dist/server.esm.js"),
-        format: "es"
-      },
+      }
     ],
     plugins: [
       commonjs({
@@ -50,7 +47,8 @@ export default [
       globals(),
       builtins(),
       typescript({
-        exclude: "node_modules/**"
+        exclude: "node_modules/**",
+        module: "commonjs"
       })
     ]
   }
