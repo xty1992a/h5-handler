@@ -1,8 +1,8 @@
 {
   "name": "@redbuck/h5-handler",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
-  "main": "src/server.js",
+  "main": "dist/client.esm.js",
   "scripts": {
     "compile": "rollup --config config/index.mjs",
     "build": "rm -rf dist && pnpm compile"
