@@ -19,7 +19,6 @@ const path = require("path");
 const { URL } = require("url");
 const assets = (_path) => path.resolve(__dirname, _path);
 const H5Handler = require("@redbuck/h5-handler/server").default;
-const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
 const SOCKET_CONFIG = {
     port: 5001,
@@ -45,9 +44,9 @@ const SOCKET_CONFIG = {
   await h5Sever.connected();
   // 3. 连接成功，页面还需要加载，等待期待的元素渲染完成
   await h5Sever.waitFor("#web-app");
-  // 4. 一顿模拟操作，将会打开小程序页面
-  const el = await h5Sever.$("#some-el-id");
-  const ok = await el?.click();
+  // 4. 获取客户端所在页面的元素并进行操作
+  const el = await h5Sever.$("#some-el-id"); // return {payload, click}
+  const ok = await el?.click(); // return 'click:ok'
   console.log(el?.payload.text, ok);
  
   // 5. 关闭服务端
@@ -57,6 +56,7 @@ const SOCKET_CONFIG = {
 
 //# region helper
 
+/** 处理h5连接，让客户端知道如何与服务端建立连接 */
 function mkH5Link({ port, key, link }) {
   const query = new URLSearchParams();
   const url = new URL(link);
