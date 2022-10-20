@@ -31,19 +31,19 @@ const SOCKET_CONFIG = {
   });
   const h5Sever = new H5Handler(SOCKET_CONFIG);
   h5Sever.listen();
-  const h5link = mkH5Link({ 
-    ...SOCKET_CONFIG, 
-    // 待测试h5地址
-    link: "http://localhost:8080/hello?world=0"
-  });
+  
+  // 0. 处理小程序连接，告知客户端如何连接服务端
+  const h5link = '/page/h5?url=' + encodeURIComponent(h5Sever.processLink('http://localhost:8080/hello?world=0'))
 
   // 1. 用小程序的webview页面打开待测试h5链接
   await miniProgram.reLaunch(h5link);
 
   // 2. 等待h5连接成功
   await h5Sever.connected();
+  
   // 3. 连接成功，页面还需要加载，等待期待的元素渲染完成
   await h5Sever.waitFor("#web-app");
+  
   // 4. 获取客户端所在页面的元素并进行操作
   const el = await h5Sever.$("#some-el-id"); // return {payload, click}
   const ok = await el?.click(); // return 'click:ok'
@@ -54,21 +54,6 @@ const SOCKET_CONFIG = {
   await miniProgram.close();
 })();
 
-//# region helper
-
-/** 处理h5连接，让客户端知道如何与服务端建立连接 */
-function mkH5Link({ port, key, link }) {
-  const query = new URLSearchParams();
-  const url = new URL(link);
-  // 客户端连接标识
-  url.searchParams.set("socket", `ws://localhost:${port}`);
-  url.searchParams.set("socket_key", key);
-  query.set("url", url.toString());
-
-  return `/page/h5?${query.toString()}`;
-}
-
-//# endregion
 ```
 
 ### 客户端

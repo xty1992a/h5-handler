@@ -1,5 +1,6 @@
 import { WebSocket, WebSocketServer } from "ws";
 import {EventEmitter} from 'events'
+import { URL } from "url";
 const sleep = (time: number) => new Promise(resolve => setTimeout(resolve, time));
 const rdm = () => Math.random().toString(36).substr(2, 15);
 
@@ -22,6 +23,15 @@ class Server {
 
   constructor(option: Option) {
     option && this.start(option)
+  }
+
+  processLink(link: string) {
+    const url = new URL(link)
+    const {port, key} = this.option
+    url.searchParams.set("socket", `ws://localhost:${port}`);
+    url.searchParams.set("socket_key", key);
+
+    return url.toString()
   }
 
   /**
